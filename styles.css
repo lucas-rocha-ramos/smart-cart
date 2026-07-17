@@ -331,13 +331,9 @@ header {
     background: #d33426;
 }
 
-@keyframes pulse-warning {
-    0%, 100% { border-left-color: #fbbc04; }
-    50% { border-left-color: #ea4335; }
-}
-
-.pending-item.timeout-warning {
-    animation: pulse-warning 0.8s ease 3;
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 /* ================================================================
@@ -376,11 +372,6 @@ header {
 
 .product-item:last-child {
     border-bottom: none;
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
 }
 
 .product-item .info {
