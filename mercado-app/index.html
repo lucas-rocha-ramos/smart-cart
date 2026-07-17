@@ -7,14 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: #f0f2f5;
             display: flex;
             justify-content: center;
@@ -22,7 +17,6 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
         .container {
             background: white;
             border-radius: 24px;
@@ -32,28 +26,18 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.12);
             text-align: center;
         }
-        
         .logo {
             font-size: 32px;
             font-weight: 800;
             color: #1a73e8;
-            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
+            margin-bottom: 4px;
         }
-        
-        .logo i {
-            font-size: 40px;
-        }
-        
-        .subtitle {
-            color: #5f6368;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-        
+        .logo i { font-size: 40px; }
+        .subtitle { color: #5f6368; margin-bottom: 24px; font-size: 14px; }
         .status {
             display: inline-flex;
             align-items: center;
@@ -64,17 +48,7 @@
             font-weight: 600;
             margin-bottom: 16px;
         }
-        
-        .status.active {
-            background: #e6f4ea;
-            color: #1e7e34;
-        }
-        
-        .status.inactive {
-            background: #fce8e6;
-            color: #d33426;
-        }
-        
+        .status.active { background: #e6f4ea; color: #1e7e34; }
         .qr-box {
             background: #f8f9fa;
             border-radius: 16px;
@@ -82,13 +56,11 @@
             margin: 12px 0 16px 0;
             border: 2px dashed #dadce0;
         }
-        
         .qr-box img {
             max-width: 200px;
             width: 100%;
             height: auto;
         }
-        
         .code-display {
             font-size: 22px;
             font-weight: 700;
@@ -101,7 +73,6 @@
             letter-spacing: 3px;
             font-family: monospace;
         }
-        
         .btn {
             background: #1a73e8;
             color: white;
@@ -116,46 +87,18 @@
             align-items: center;
             gap: 8px;
         }
-        
-        .btn:hover {
-            background: #1557b0;
-            transform: scale(1.02);
-        }
-        
-        .btn-secondary {
-            background: #f1f3f4;
-            color: #3c4043;
-        }
-        
-        .btn-secondary:hover {
-            background: #e8eaed;
-        }
-        
-        .btn-success {
-            background: #34a853;
-        }
-        
-        .btn-success:hover {
-            background: #2d9249;
-        }
-        
+        .btn:hover { background: #1557b0; transform: scale(1.02); }
+        .btn-secondary { background: #f1f3f4; color: #3c4043; }
+        .btn-secondary:hover { background: #e8eaed; }
+        .btn-success { background: #34a853; }
+        .btn-success:hover { background: #2d9249; }
         .info {
             color: #5f6368;
             font-size: 14px;
             margin: 16px 0;
             line-height: 1.6;
         }
-        
-        .info i {
-            color: #1a73e8;
-        }
-        
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #e8eaed;
-        }
-        
+        hr { margin: 20px 0; border: none; border-top: 1px solid #e8eaed; }
         .carrinhos-title {
             font-size: 16px;
             margin-bottom: 12px;
@@ -165,12 +108,7 @@
             gap: 8px;
             color: #3c4043;
         }
-        
-        .carrinhos-list {
-            margin: 12px 0;
-            text-align: left;
-        }
-        
+        .carrinhos-list { margin: 12px 0; text-align: left; }
         .carrinho-item {
             display: flex;
             justify-content: space-between;
@@ -180,13 +118,7 @@
             border-radius: 8px;
             margin-bottom: 6px;
             font-size: 14px;
-            transition: var(--transition);
         }
-        
-        .carrinho-item:hover {
-            background: #e8f0fe;
-        }
-        
         .carrinho-item .badge {
             background: #1a73e8;
             color: white;
@@ -195,19 +127,8 @@
             font-size: 11px;
             font-weight: 600;
         }
-        
-        .carrinho-item .valor {
-            color: #1a73e8;
-            font-weight: 700;
-        }
-        
-        .carrinho-item .empty {
-            color: #5f6368;
-            font-style: italic;
-            width: 100%;
-            text-align: center;
-        }
-        
+        .carrinho-item .valor { color: #1a73e8; font-weight: 700; }
+        .carrinho-item .empty { color: #5f6368; font-style: italic; width: 100%; text-align: center; }
         .actions {
             display: flex;
             gap: 8px;
@@ -215,89 +136,30 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        
-        .actions .btn {
-            flex: 1;
-            min-width: 120px;
-            justify-content: center;
-        }
-        
-        .carrinho-count {
-            font-size: 13px;
-            color: #5f6368;
-            margin-top: 4px;
-        }
-        
+        .actions .btn { flex: 1; min-width: 120px; justify-content: center; }
         @media (max-width: 480px) {
-            .container {
-                padding: 24px 16px;
-            }
-            
-            .qr-box img {
-                max-width: 150px;
-            }
-            
-            .actions .btn {
-                min-width: 100px;
-                font-size: 14px;
-                padding: 12px 16px;
-            }
+            .container { padding: 24px 16px; }
+            .qr-box img { max-width: 150px; }
         }
-        
-        /* Animações */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .container {
-            animation: fadeIn 0.4s ease;
-        }
-        
-        .qr-box img {
-            transition: all 0.3s ease;
-        }
-        
-        .qr-box img:hover {
-            transform: scale(1.05);
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f3f4;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1a73e8;
-            border-radius: 4px;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .container { animation: fadeIn 0.4s ease; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- LOGO -->
         <div class="logo">
             <i class="fas fa-store"></i>
             <span>SmartCart</span>
         </div>
         <p class="subtitle">App do Supermercado</p>
         
-        <!-- STATUS -->
         <div class="status active">
             <i class="fas fa-circle" style="font-size: 10px;"></i>
             Sistema Ativo
         </div>
 
-        <!-- QR CODE -->
-        <h3 style="margin: 8px 0 4px 0; font-size: 18px;">
-            📱 QR Code para Cliente
-        </h3>
-        <p style="color: #5f6368; font-size: 13px; margin-bottom: 8px;">
-            Cliente escaneia este código no carrinho
-        </p>
+        <h3 style="margin: 8px 0 4px 0; font-size: 18px;">📱 QR Code para Cliente</h3>
+        <p style="color: #5f6368; font-size: 13px; margin-bottom: 8px;">Cliente escaneia este código no carrinho</p>
         
         <div class="qr-box">
             <img id="qrImage" src="" alt="QR Code">
@@ -312,15 +174,10 @@
         <div class="info">
             <i class="fas fa-info-circle"></i>
             O cliente escaneia este QR Code no tablet do carrinho para iniciar a compra.
-            <br>
-            <span style="font-size: 12px; color: #9aa0a6;">
-                Código válido por tempo indeterminado
-            </span>
         </div>
 
         <hr>
 
-        <!-- CARRINHOS ATIVOS -->
         <div class="carrinhos-title">
             <i class="fas fa-shopping-cart"></i>
             Carrinhos Ativos
@@ -329,13 +186,10 @@
         
         <div id="carrinhosList" class="carrinhos-list">
             <div class="carrinho-item">
-                <span class="empty">
-                    <i class="fas fa-inbox"></i> Nenhum carrinho ativo
-                </span>
+                <span class="empty"><i class="fas fa-inbox"></i> Nenhum carrinho ativo</span>
             </div>
         </div>
 
-        <!-- AÇÕES -->
         <div class="actions">
             <button class="btn btn-secondary" onclick="window.location.href='../index.html'">
                 <i class="fas fa-arrow-left"></i> Voltar
@@ -347,170 +201,71 @@
     </div>
 
     <script>
-        // ================================================================
-        // CONFIGURAÇÕES
-        // ================================================================
-        
         let codigoAtual = 'ABC123';
         let carrinhosAtivos = [];
         
-        // ================================================================
-        // GERADOR DE QR CODE
-        // ================================================================
-        
         function gerarNovoQR() {
-            // Gera um código aleatório de 6 caracteres
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let codigo = '';
             for (let i = 0; i < 6; i++) {
                 codigo += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             codigoAtual = codigo;
-            
-            // Atualiza a UI
             document.getElementById('codigoDisplay').textContent = codigo;
-            
-            // Gera QR Code via API pública
             const url = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${codigo}`;
             document.getElementById('qrImage').src = url;
-            
-            // Mostra no console
             console.log(`📱 Novo QR Code gerado: ${codigo}`);
-            console.log(`🔗 URL do QR: ${url}`);
-            
-            // Feedback visual
-            const btn = document.querySelector('.qr-box .btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i> Gerado!';
-            btn.style.background = '#34a853';
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '';
-            }, 2000);
         }
-        
-        // ================================================================
-        // SIMULAÇÃO DE CARRINHOS ATIVOS
-        // ================================================================
         
         function atualizarCarrinhos() {
             const container = document.getElementById('carrinhosList');
             const count = document.getElementById('carrinhoCount');
-            
-            // Gera dados aleatórios para simulação
-            const nomesProdutos = [
-                'Arroz 5kg', 'Feijão 1kg', 'Leite 1L', 'Café 500g', 
-                'Açúcar 1kg', 'Óleo 900ml', 'Sabão 1kg', 'Papel 4x',
-                'Biscoito 200g', 'Refri 2L', 'Macarrão 500g', 'Molho 340g'
-            ];
-            
-            // Atualiza a lista de carrinhos
-            const numCarrinhos = Math.floor(Math.random() * 4) + 1; // 1 a 4 carrinhos
+            const nomesProdutos = ['Arroz 5kg', 'Feijão 1kg', 'Leite 1L', 'Café 500g', 'Açúcar 1kg', 'Óleo 900ml'];
+            const numCarrinhos = Math.floor(Math.random() * 4) + 1;
             carrinhosAtivos = [];
             
             for (let i = 0; i < numCarrinhos; i++) {
                 const numItens = Math.floor(Math.random() * 5) + 1;
-                const itens = [];
                 let total = 0;
-                
                 for (let j = 0; j < numItens; j++) {
-                    const produto = nomesProdutos[Math.floor(Math.random() * nomesProdutos.length)];
-                    const preco = (Math.random() * 20 + 3).toFixed(2);
-                    itens.push(produto);
-                    total += parseFloat(preco);
+                    total += parseFloat((Math.random() * 20 + 3).toFixed(2));
                 }
-                
                 carrinhosAtivos.push({
                     id: `#${String(i + 1).padStart(3, '0')}`,
-                    itens: itens.length,
-                    total: total.toFixed(2),
-                    produtos: itens
+                    itens: numItens,
+                    total: total.toFixed(2)
                 });
             }
             
-            // Atualiza contador
             count.textContent = `(${carrinhosAtivos.length})`;
             
-            // Renderiza lista
             if (carrinhosAtivos.length === 0) {
-                container.innerHTML = `
-                    <div class="carrinho-item">
-                        <span class="empty">
-                            <i class="fas fa-inbox"></i> Nenhum carrinho ativo
-                        </span>
-                    </div>
-                `;
+                container.innerHTML = `<div class="carrinho-item"><span class="empty"><i class="fas fa-inbox"></i> Nenhum carrinho ativo</span></div>`;
                 return;
             }
             
             container.innerHTML = carrinhosAtivos.map(c => `
                 <div class="carrinho-item">
-                    <span>
-                        ${c.id}
-                        <span class="badge">${c.itens} item${c.itens > 1 ? 's' : ''}</span>
-                    </span>
+                    <span>${c.id} <span class="badge">${c.itens} item${c.itens > 1 ? 's' : ''}</span></span>
                     <span class="valor">R$ ${c.total}</span>
                 </div>
             `).join('');
         }
         
-        // ================================================================
-        // FUNÇÕES AUXILIARES
-        // ================================================================
-        
         function abrirCarrinhoTeste() {
-            // Abre o carrinho principal em uma nova guia
             window.open('../index.html', '_blank');
-            
-            // Mostra notificação
             const btn = document.querySelector('.btn-success');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-check"></i> Aberto!';
             btn.style.background = '#1a73e8';
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '';
-            }, 2000);
-            
-            // Adiciona um carrinho à lista
-            const novoCarrinho = {
-                id: `#${String(carrinhosAtivos.length + 1).padStart(3, '0')}`,
-                itens: Math.floor(Math.random() * 3) + 1,
-                total: (Math.random() * 50 + 10).toFixed(2),
-                produtos: ['Produto teste']
-            };
-            carrinhosAtivos.push(novoCarrinho);
-            atualizarCarrinhos();
+            setTimeout(() => { btn.innerHTML = originalText; btn.style.background = ''; }, 2000);
         }
-        
-        // ================================================================
-        // INICIALIZAÇÃO
-        // ================================================================
         
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🏪 App do Mercado iniciado!');
-            
-            // Gera QR Code inicial
             gerarNovoQR();
-            
-            // Atualiza carrinhos a cada 8 segundos
             atualizarCarrinhos();
             setInterval(atualizarCarrinhos, 8000);
-            
-            // Atualiza o tempo real dos carrinhos
-            setInterval(() => {
-                const itens = document.querySelectorAll('.carrinho-item .badge');
-                if (itens.length > 0) {
-                    itens.forEach(badge => {
-                        const current = parseInt(badge.textContent);
-                        if (current && !isNaN(current)) {
-                            // Pequena variação para simular movimento
-                            const novo = Math.max(1, current + (Math.random() > 0.7 ? 1 : 0));
-                            badge.textContent = `${novo} item${novo > 1 ? 's' : ''}`;
-                        }
-                    });
-                }
-            }, 15000);
         });
     </script>
 </body>
