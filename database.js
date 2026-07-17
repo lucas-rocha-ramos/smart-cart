@@ -125,9 +125,7 @@ const DB = {
  * Busca um produto pelo código de barras
  */
 async function buscarProduto(barcode) {
-    // Inicializa produtos se não existirem
     inicializarProdutos();
-    
     const produtos = DB.findItems('produtos', 'barcode', barcode);
     return produtos.length > 0 ? produtos[0] : null;
 }
@@ -316,31 +314,4 @@ function limparBancoDeDados() {
     if (confirm('Limpar todos os dados?')) {
         DB.clearAll();
         console.log('🗑️ Banco de dados limpo!');
-        location.reload();
-    }
-}
-
-// ================================================================
-// EXPORTAR FUNÇÕES
-// ================================================================
-
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        DB,
-        buscarProduto,
-        listarProdutos,
-        adicionarProduto,
-        atualizarProduto,
-        removerProduto,
-        criarCarrinho,
-        buscarCarrinho,
-        adicionarAoCarrinho,
-        removerDoCarrinho,
-        listarCarrinhosAtivos,
-        salvarPedido,
-        buscarPedidosUsuario,
-        listarPedidos,
-        verBancoDeDados,
-        limparBancoDeDados
-    };
-}
+        location.reload
