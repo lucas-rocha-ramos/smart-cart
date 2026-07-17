@@ -278,24 +278,31 @@ function inicializarProdutos() {
     
     if (produtos.length === 0) {
         const produtosDemo = [
+            // Alimentos
             { nome: 'Arroz 5kg', barcode: '7891000100106', preco: 22.90, peso: 5000 },
             { nome: 'Feijão 1kg', barcode: '7891000200103', preco: 8.90, peso: 1000 },
             { nome: 'Leite 1L', barcode: '7891000300102', preco: 4.50, peso: 1000 },
             { nome: 'Café 500g', barcode: '7891000400101', preco: 12.90, peso: 500 },
             { nome: 'Açúcar 1kg', barcode: '7891000500100', preco: 6.90, peso: 1000 },
             { nome: 'Óleo 900ml', barcode: '7891000600109', preco: 9.90, peso: 900 },
-            { nome: 'Sabão 1kg', barcode: '7891000700108', preco: 11.90, peso: 1000 },
-            { nome: 'Papel 4x', barcode: '7891000800107', preco: 7.90, peso: 400 },
+            { nome: 'Macarrão 500g', barcode: '7891001100104', preco: 5.90, peso: 500 },
+            { nome: 'Molho 340g', barcode: '7891001200103', preco: 4.90, peso: 340 },
             { nome: 'Biscoito 200g', barcode: '7891000900106', preco: 3.50, peso: 200 },
             { nome: 'Refrigerante 2L', barcode: '7891001000105', preco: 8.50, peso: 2000 },
-            { nome: 'Macarrão 500g', barcode: '7891001100104', preco: 5.90, peso: 500 },
-            { nome: 'Molho 340g', barcode: '7891001200103', preco: 4.90, peso: 340 }
+            
+            // Limpeza
+            { nome: 'Sabão 1kg', barcode: '7891000700108', preco: 11.90, peso: 1000 },
+            { nome: 'Papel 4x', barcode: '7891000800107', preco: 7.90, peso: 400 },
+            
+            // 🆕 NOVO PRODUTO ADICIONADO
+            { nome: 'Palito de dente GINA 200 unidades', barcode: '7896051020158', preco: 2.50, peso: 50 }
         ];
         
         for (const p of produtosDemo) {
             DB.addItem('produtos', p);
         }
         console.log('✅ Produtos demo carregados no LocalStorage!');
+        console.log('📋 Total:', produtosDemo.length, 'produtos');
     }
 }
 
@@ -305,9 +312,12 @@ function inicializarProdutos() {
 
 function verBancoDeDados() {
     console.log('📊 BANCO DE DADOS LOCAL:');
-    console.log('Produtos:', DB.listItems('produtos'));
-    console.log('Carrinhos:', DB.listItems('carrinhos'));
-    console.log('Pedidos:', DB.listItems('pedidos'));
+    console.log('📦 Produtos:', DB.listItems('produtos').length, 'itens');
+    console.log('🛒 Carrinhos:', DB.listItems('carrinhos').length, 'itens');
+    console.log('📋 Pedidos:', DB.listItems('pedidos').length, 'itens');
+    console.log('\n📦 Produtos:', DB.listItems('produtos'));
+    console.log('🛒 Carrinhos:', DB.listItems('carrinhos'));
+    console.log('📋 Pedidos:', DB.listItems('pedidos'));
 }
 
 function limparBancoDeDados() {
@@ -316,6 +326,14 @@ function limparBancoDeDados() {
         console.log('🗑️ Banco de dados limpo!');
         location.reload();
     }
+}
+
+function listarCodigosBarras() {
+    const produtos = DB.listItems('produtos');
+    console.log('📋 CÓDIGOS DE BARRAS DISPONÍVEIS:');
+    produtos.forEach(p => {
+        console.log(`  ${p.barcode} - ${p.nome} - R$ ${p.preco.toFixed(2)}`);
+    });
 }
 
 // ================================================================
@@ -339,6 +357,7 @@ if (typeof module !== 'undefined' && module.exports) {
         buscarPedidosUsuario,
         listarPedidos,
         verBancoDeDados,
-        limparBancoDeDados
+        limparBancoDeDados,
+        listarCodigosBarras
     };
 }
