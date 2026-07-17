@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🛒 Smart Cart iniciado! (Sem Firebase)');
     console.log(`📦 Versão: ${CONFIG.VERSAO}`);
     
-    // Mostra ajuda no console
     console.log('📋 Comandos disponíveis:');
     console.log('  verBancoDeDados() - Ver todos os dados');
     console.log('  limparBancoDeDados() - Limpar todos os dados');
@@ -32,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     criarContainerNotificacoes();
     configurarEventos();
     
-    // Inicializa produtos
     inicializarProdutos();
     
     // Verifica sessão
@@ -117,7 +115,7 @@ function configurarEventos() {
     document.getElementById('btnNewPurchase')?.addEventListener('click', novaCompra);
     document.getElementById('btnBackToCart')?.addEventListener('click', voltarParaCarrinho);
     
-    // Debug - clique duplo no logo para abrir console
+    // Debug
     document.querySelector('.logo')?.addEventListener('dblclick', () => {
         verBancoDeDados();
         console.log('💡 Dica: use limparBancoDeDados() para resetar');
@@ -143,7 +141,6 @@ async function abrirScannerLogin() {
 }
 
 async function processarLogin(codigo) {
-    // Qualquer código com 4+ caracteres é válido
     if (codigo && codigo.length >= 4) {
         estado.usuarioId = `cliente_${Date.now().toString().slice(-6)}`;
         estado.estaLogado = true;
@@ -372,7 +369,6 @@ function mostrarTela(telaId) {
 // EXPORTA FUNÇÕES PARA O CONSOLE (DEBUG)
 // ================================================================
 
-// Torna funções acessíveis no console para debug
 window.verBancoDeDados = verBancoDeDados;
 window.limparBancoDeDados = limparBancoDeDados;
 window.DB = DB;
