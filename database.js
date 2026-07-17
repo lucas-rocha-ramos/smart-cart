@@ -295,7 +295,7 @@ function inicializarProdutos() {
             { nome: 'Papel 4x', barcode: '7891000800107', preco: 7.90, peso: 400 },
             
             // 🆕 NOVO PRODUTO ADICIONADO
-            { nome: 'Palito de dente GINA 200 unidades', barcode: '7890396709796', preco: 2.50, peso: 50 }
+            { nome: 'Palito de dente GINA 200 unidades', barcode: '7896051020158', preco: 2.50, peso: 50 }
         ];
         
         for (const p of produtosDemo) {
