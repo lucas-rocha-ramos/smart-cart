@@ -1,5 +1,5 @@
 // ================================================================
-// APP.JS - Lógica principal (com imagens e busca corrigida)
+// APP.JS - Lógica principal (com FORÇA de carregamento de produtos)
 // ================================================================
 
 const estado = {
@@ -24,10 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('  verBancoDeDados() - Ver todos os dados');
     console.log('  limparBancoDeDados() - Resetar dados');
     console.log('  listarCodigosBarras() - Listar códigos');
+    console.log('  forcarCarregarProdutos() - Forçar recarregar produtos');
     
     criarContainerNotificacoes();
     configurarEventos();
-    inicializarProdutos();
+    
+    // 🔥 FORÇA O CARREGAMENTO DOS PRODUTOS
+    forcarCarregarProdutos();
     
     const sessao = localStorage.getItem('sessaoCart');
     if (sessao) {
@@ -47,6 +50,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// ================================================================
+// 🔥 FORÇA CARREGAMENTO DOS PRODUTOS
+// ================================================================
+
+function forcarCarregarProdutos() {
+    console.log('🔄 Forçando carregamento de produtos...');
+    
+    // Limpa produtos existentes para recarregar
+    DB.clearCollection('produtos');
+    
+    // Recarrega os produtos
+    inicializarProdutos();
+    
+    // Verifica se carregou
+    const produtos = DB.listItems('produtos');
+    console.log(`📦 ${produtos.length} produtos carregados:`);
+    produtos.forEach(p => {
+        console.log(`  ${p.barcode} - ${p.nome}`);
+    });
+    
+    if (produtos.length > 0) {
+        mostrarNotificacao(`✅ ${produtos.length} produtos carregados!`, 'success');
+    } else {
+        console.error('❌ Erro ao carregar produtos!');
+        mostrarNotificacao('❌ Erro ao carregar produtos. Recarregue a página.', 'error');
+    }
+}
 
 // ================================================================
 // NOTIFICAÇÕES
@@ -165,11 +196,21 @@ async function adicionarProdutoPorCodigo() {
     }
     
     console.log('🔍 Buscando produto:', codigo);
+    
+    // Verifica se os produtos estão carregados
+    let produtos = DB.listItems('produtos');
+    if (produtos.length === 0) {
+        console.log('⚠️ Nenhum produto encontrado. Recarregando...');
+        forcarCarregarProdutos();
+        produtos = DB.listItems('produtos');
+    }
+    
     const produto = await buscarProduto(codigo);
     
     if (!produto) {
         mostrarNotificacao(`❌ Produto "${codigo}" não encontrado.`, 'error');
         console.log('❌ Produto NÃO encontrado no banco.');
+        console.log('📋 Produtos disponíveis:', produtos.map(p => p.barcode).join(', '));
         input.value = '';
         input.focus();
         return;
@@ -401,6 +442,7 @@ function mostrarNotificacao(mensagem, tipo = 'info') {
 window.verBancoDeDados = verBancoDeDados;
 window.limparBancoDeDados = limparBancoDeDados;
 window.listarCodigosBarras = listarCodigosBarras;
+window.forcarCarregarProdutos = forcarCarregarProdutos;
 window.DB = DB;
 
 // ================================================================
@@ -421,3 +463,4 @@ console.log('🍪 Biscoito: 7891000900106');
 console.log('🥤 Refri: 7891001000105');
 console.log('\n🔑 Login: Qualquer código com 4+ caracteres (ex: ABC123)');
 console.log('📱 App do Mercado: /mercado-app/');
+console.log('\n🔥 Se os produtos não carregarem, digite: forcarCarregarProdutos()');
