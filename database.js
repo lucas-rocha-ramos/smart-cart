@@ -314,4 +314,31 @@ function limparBancoDeDados() {
     if (confirm('Limpar todos os dados?')) {
         DB.clearAll();
         console.log('🗑️ Banco de dados limpo!');
-        location.reload
+        location.reload();
+    }
+}
+
+// ================================================================
+// EXPORTAR FUNÇÕES
+// ================================================================
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        DB,
+        buscarProduto,
+        listarProdutos,
+        adicionarProduto,
+        atualizarProduto,
+        removerProduto,
+        criarCarrinho,
+        buscarCarrinho,
+        adicionarAoCarrinho,
+        removerDoCarrinho,
+        listarCarrinhosAtivos,
+        salvarPedido,
+        buscarPedidosUsuario,
+        listarPedidos,
+        verBancoDeDados,
+        limparBancoDeDados
+    };
+}
