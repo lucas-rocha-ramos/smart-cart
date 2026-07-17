@@ -211,3 +211,23 @@ async function abrirScannerBarras() {
             scanner.pararCamera();
             btn.innerHTML = originalText;
             btn.style.background = '';
+        }, 15000);
+    }
+}
+
+function fecharScanner() {
+    scanner.pararCamera();
+    const btn = document.getElementById('btnScanBarcode');
+    if (btn) {
+        btn.innerHTML = '<i class="fas fa-camera"></i> Escanear código';
+        btn.style.background = '';
+    }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        scanner,
+        abrirScannerBarras,
+        fecharScanner
+    };
+}
