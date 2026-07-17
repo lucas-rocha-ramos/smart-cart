@@ -20,8 +20,8 @@
     <div id="loginScreen" class="screen active">
         <div class="login-container">
             <div class="logo">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Smart Cart</span>
+                <div class="logo-icon"><i class="fas fa-shopping-cart"></i></div>
+                <span class="logo-text">Smart Cart</span>
             </div>
             <h2>Bem-vindo ao Carrinho Inteligente</h2>
             <p class="subtitle">Escanear QR Code do app do mercado para iniciar</p>
@@ -53,7 +53,7 @@
         <!-- HEADER -->
         <header>
             <div class="header-left">
-                <i class="fas fa-user-circle"></i>
+                <div class="avatar" id="userAvatar">C</div>
                 <span id="userName">Cliente</span>
             </div>
             <div class="header-center">
@@ -72,13 +72,13 @@
 
         <!-- PRODUTOS PENDENTES (CONFIRMAÇÃO) -->
         <div id="pendingContainer">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;color:#5f6368;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;color:#8E8E93;">
                 <i class="fas fa-hourglass-half"></i>
                 <span>Aguardando confirmação:</span>
-                <span id="pendingCount" style="font-weight:600;color:#1a73e8;">0</span>
+                <span id="pendingCount" style="font-weight:600;color:#007AFF;">0</span>
             </div>
             <div id="pendingProducts">
-                <div style="text-align:center;color:#5f6368;padding:8px;font-size:13px;">
+                <div style="text-align:center;color:#8E8E93;padding:8px;font-size:13px;">
                     Nenhum produto aguardando confirmação
                 </div>
             </div>
@@ -91,7 +91,7 @@
                 <div class="empty-cart">
                     <i class="fas fa-shopping-basket"></i>
                     <p>Carrinho vazio</p>
-                    <span style="font-size:12px;">Escaneie e confirme um produto</span>
+                    <span>Escaneie e confirme um produto</span>
                 </div>
             </div>
         </div>
@@ -108,16 +108,19 @@
                 <button id="btnScanBarcode" class="btn-scan-camera" onclick="abrirScannerBarras()">
                     <i class="fas fa-camera"></i> Escanear código
                 </button>
+                <button onclick="forcarCarregarProdutos()" style="background:#FF9500;color:white;border:none;padding:12px 16px;border-radius:12px;font-weight:600;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+                    <i class="fas fa-sync"></i> Recarregar
+                </button>
             </div>
             <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;">
-                <button onclick="testarCodigoBarrasManual('7896051020158')" style="background:#e8f0fe;border:none;padding:4px 10px;border-radius:12px;font-size:11px;color:#1a73e8;cursor:pointer;">
-                    Testar Palito
+                <button onclick="testarCodigoBarrasManual('7896051020158')" style="background:#E8F0FE;border:none;padding:4px 12px;border-radius:12px;font-size:11px;color:#007AFF;cursor:pointer;font-weight:500;">
+                    🪥 Testar Palito
                 </button>
-                <button onclick="testarCodigoBarrasManual('7891000100106')" style="background:#e8f0fe;border:none;padding:4px 10px;border-radius:12px;font-size:11px;color:#1a73e8;cursor:pointer;">
-                    Testar Arroz
+                <button onclick="testarCodigoBarrasManual('7891000100106')" style="background:#E8F0FE;border:none;padding:4px 12px;border-radius:12px;font-size:11px;color:#007AFF;cursor:pointer;font-weight:500;">
+                    🍚 Testar Arroz
                 </button>
-                <button onclick="testarCodigoBarrasManual('7891000200103')" style="background:#e8f0fe;border:none;padding:4px 10px;border-radius:12px;font-size:11px;color:#1a73e8;cursor:pointer;">
-                    Testar Feijão
+                <button onclick="testarCodigoBarrasManual('7891000200103')" style="background:#E8F0FE;border:none;padding:4px 12px;border-radius:12px;font-size:11px;color:#007AFF;cursor:pointer;font-weight:500;">
+                    🫘 Testar Feijão
                 </button>
             </div>
         </div>
