@@ -2,34 +2,23 @@
 // SCANNER.JS - Leitor de código de barras REAL (com QuaggaJS)
 // ================================================================
 
-// ================================================================
-// CARREGAR QUAGGAJS (Biblioteca de leitura real)
-// ================================================================
-
-// Carrega a biblioteca QuaggaJS via CDN
+// Carrega o QuaggaJS via CDN
 const scriptQuagga = document.createElement('script');
 scriptQuagga.src = 'https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js';
 scriptQuagga.async = true;
 document.head.appendChild(scriptQuagga);
 
-// ================================================================
-// VARIÁVEIS GLOBAIS
-// ================================================================
-
 let scannerAtivo = false;
 let scannerStream = null;
-let scannerVideo = null;
 let quaggaInicializado = false;
 let ultimoCodigoLido = '';
 let ultimaLeitura = 0;
-let onBarcodeCallback = null;
 
 // ================================================================
-// FUNÇÃO PARA ABRIR O SCANNER (COM QUAGGAJS)
+// FUNÇÃO PARA ABRIR O SCANNER
 // ================================================================
 
 async function abrirScannerBarras() {
-    // Verifica se o navegador suporta câmera
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         alert('❌ Seu dispositivo não suporta câmera.');
         return;
@@ -41,24 +30,21 @@ async function abrirScannerBarras() {
         return;
     }
 
-    // Cria o modal do scanner
-    const modal = criarModalScanner();
+    criarModalScanner();
 
     try {
-        // Verifica se o QuaggaJS foi carregado
+        // Aguarda o QuaggaJS carregar
         if (typeof Quagga === 'undefined') {
-            // Aguarda o carregamento da biblioteca
             await new Promise((resolve) => {
-                const checkQuagga = setInterval(() => {
+                const check = setInterval(() => {
                     if (typeof Quagga !== 'undefined') {
-                        clearInterval(checkQuagga);
+                        clearInterval(check);
                         resolve();
                     }
                 }, 100);
             });
         }
 
-        // Inicializa o QuaggaJS
         Quagga.init({
             inputStream: {
                 type: 'LiveStream',
@@ -90,13 +76,10 @@ async function abrirScannerBarras() {
                 return;
             }
 
-            console.log('✅ QuaggaJS iniciado com sucesso!');
+            console.log('✅ QuaggaJS iniciado!');
             quaggaInicializado = true;
-
-            // Inicia o Quagga
             Quagga.start();
 
-            // Configura o callback para detecção de código
             Quagga.onDetected(function(result) {
                 const code = result.codeResult.code;
                 if (code) {
@@ -105,40 +88,42 @@ async function abrirScannerBarras() {
                         ultimoCodigoLido = code;
                         ultimaLeitura = agora;
                         
-                        console.log('📷 Código lido:', code);
+                        console.log('📷 Código REAL lido:', code);
                         
                         // Feedback visual
-                        const modal = document.getElementById('scannerModal');
-                        if (modal) {
-                            const border = modal.querySelector('.scan-border');
-                            if (border) {
-                                border.style.borderColor = '#34a853';
-                                border.style.boxShadow = '0 0 50px rgba(52,168,83,0.6)';
-                                setTimeout(() => {
-                                    border.style.borderColor = '#34a853';
-                                    border.style.boxShadow = '0 0 30px rgba(52,168,83,0.3)';
-                                }, 300);
-                            }
+                        const border = document.querySelector('.scan-border');
+                        if (border) {
+                            border.style.borderColor = '#34C759';
+                            border.style.boxShadow = '0 0 50px rgba(52,199,89,0.6)';
+                            setTimeout(() => {
+                                border.style.borderColor = '#34C759';
+                                border.style.boxShadow = '0 0 30px rgba(52,199,89,0.3)';
+                            }, 300);
                         }
                         
-                        // Toca som de bip
+                        // Atualiza status
+                        const status = document.getElementById('scannerStatus');
+                        if (status) {
+                            status.textContent = '✅ Código lido: ' + code;
+                            status.style.background = 'rgba(52,199,89,0.8)';
+                        }
+                        
                         tocarBipScanner();
                         
-                        // Preenche o input e fecha
                         input.value = code;
                         setTimeout(() => {
                             fecharScanner();
                             document.getElementById('btnAddProduct')?.click();
-                        }, 500);
+                        }, 400);
                     }
                 }
             });
         });
 
     } catch (error) {
-        console.error('❌ Erro ao abrir scanner:', error);
-        alert('❌ Não foi possível acessar a câmera. Verifique as permissões.');
-        document.body.removeChild(modal);
+        console.error('❌ Erro:', error);
+        alert('❌ Erro ao acessar a câmera.');
+        document.body.removeChild(document.getElementById('scannerModal'));
     }
 }
 
@@ -147,7 +132,6 @@ async function abrirScannerBarras() {
 // ================================================================
 
 function criarModalScanner() {
-    // Remove modal existente
     const existing = document.getElementById('scannerModal');
     if (existing) document.body.removeChild(existing);
 
@@ -169,26 +153,27 @@ function criarModalScanner() {
     `;
 
     modal.innerHTML = `
-        <div style="position:relative;width:100%;max-width:500px;background:#000;border-radius:16px;overflow:hidden;">
+        <div style="position:relative;width:100%;max-width:500px;background:#000;border-radius:20px;overflow:hidden;">
             <div id="scannerContainer" style="width:100%;height:auto;min-height:300px;background:#000;"></div>
             <div class="scan-border" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-                        width:75%;height:35%;border:3px solid #34a853;border-radius:12px;
-                        box-shadow:0 0 30px rgba(52,168,83,0.3);pointer-events:none;
+                        width:75%;height:35%;border:3px solid #34C759;border-radius:16px;
+                        box-shadow:0 0 30px rgba(52,199,89,0.3);pointer-events:none;
                         transition: all 0.3s ease;">
-                <div style="position:absolute;top:-2px;left:-2px;width:20px;height:20px;border-top:4px solid #34a853;border-left:4px solid #34a853;border-radius:4px 0 0 0;"></div>
-                <div style="position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-top:4px solid #34a853;border-right:4px solid #34a853;border-radius:0 4px 0 0;"></div>
-                <div style="position:absolute;bottom:-2px;left:-2px;width:20px;height:20px;border-bottom:4px solid #34a853;border-left:4px solid #34a853;border-radius:0 0 0 4px;"></div>
-                <div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-bottom:4px solid #34a853;border-right:4px solid #34a853;border-radius:0 0 4px 0;"></div>
+                <div style="position:absolute;top:-3px;left:-3px;width:24px;height:24px;border-top:4px solid #34C759;border-left:4px solid #34C759;border-radius:4px 0 0 0;"></div>
+                <div style="position:absolute;top:-3px;right:-3px;width:24px;height:24px;border-top:4px solid #34C759;border-right:4px solid #34C759;border-radius:0 4px 0 0;"></div>
+                <div style="position:absolute;bottom:-3px;left:-3px;width:24px;height:24px;border-bottom:4px solid #34C759;border-left:4px solid #34C759;border-radius:0 0 0 4px;"></div>
+                <div style="position:absolute;bottom:-3px;right:-3px;width:24px;height:24px;border-bottom:4px solid #34C759;border-right:4px solid #34C759;border-radius:0 0 4px 0;"></div>
             </div>
             <div id="scannerStatus" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
-                        color:white;font-size:14px;background:rgba(0,0,0,0.7);padding:8px 16px;border-radius:8px;
-                        font-family:'Inter',sans-serif;text-align:center;min-width:200px;">
-                📷 Posicione o código de barras no centro
+                        color:white;font-size:14px;background:rgba(0,0,0,0.7);padding:10px 20px;border-radius:12px;
+                        font-family:-apple-system,'Inter',sans-serif;text-align:center;min-width:180px;
+                        transition: all 0.3s ease;">
+                📷 Posicione o código no centro
             </div>
         </div>
-        <button onclick="fecharScanner()" style="margin-top:20px;background:#ea4335;color:white;border:none;
-                padding:12px 32px;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;
-                font-family:'Inter',sans-serif;">
+        <button onclick="fecharScanner()" style="margin-top:20px;background:#FF3B30;color:white;border:none;
+                padding:14px 36px;border-radius:9999px;font-size:16px;font-weight:600;cursor:pointer;
+                font-family:-apple-system,'Inter',sans-serif;box-shadow:0 4px 16px rgba(255,59,48,0.3);">
             <i class="fas fa-times"></i> Fechar
         </button>
     `;
@@ -198,29 +183,22 @@ function criarModalScanner() {
 }
 
 // ================================================================
-// SINAL SONORO PARA LEITURA
+// SINAL SONORO
 // ================================================================
 
 function tocarBipScanner() {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(ctx.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        gainNode.gain.value = 0.3;
-        
-        oscillator.start();
-        setTimeout(() => {
-            oscillator.stop();
-        }, 150);
-    } catch (e) {
-        // Fallback: beep silencioso
-    }
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 880;
+        osc.type = 'sine';
+        gain.gain.value = 0.3;
+        osc.start();
+        setTimeout(() => osc.stop(), 150);
+    } catch (e) {}
 }
 
 // ================================================================
@@ -230,7 +208,6 @@ function tocarBipScanner() {
 function fecharScanner() {
     scannerAtivo = false;
     
-    // Para o Quagga
     if (quaggaInicializado && typeof Quagga !== 'undefined') {
         try {
             Quagga.stop();
@@ -238,24 +215,14 @@ function fecharScanner() {
         } catch (e) {}
     }
     
-    // Para a stream da câmera
     if (scannerStream) {
         scannerStream.getTracks().forEach(track => track.stop());
         scannerStream = null;
     }
     
-    if (scannerVideo) {
-        scannerVideo.srcObject = null;
-        scannerVideo = null;
-    }
-    
-    // Remove o modal
     const modal = document.getElementById('scannerModal');
-    if (modal) {
-        document.body.removeChild(modal);
-    }
+    if (modal) document.body.removeChild(modal);
     
-    // Resetar o botão
     const btn = document.getElementById('btnScanBarcode');
     if (btn) {
         btn.innerHTML = '<i class="fas fa-camera"></i> Escanear código';
@@ -263,23 +230,12 @@ function fecharScanner() {
         btn.disabled = false;
     }
     
-    // Remove a div do Quagga
     const container = document.getElementById('scannerContainer');
-    if (container) {
-        container.innerHTML = '';
-    }
+    if (container) container.innerHTML = '';
 }
 
 // ================================================================
-// VERIFICA SUPORTE A CÂMERA
-// ================================================================
-
-function isCameraSupported() {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-}
-
-// ================================================================
-// FUNÇÃO MANUAL PARA TESTE (SEM CÂMERA)
+// TESTE MANUAL
 // ================================================================
 
 function testarCodigoBarrasManual(codigo) {
@@ -288,32 +244,26 @@ function testarCodigoBarrasManual(codigo) {
         alert('Campo de entrada não encontrado.');
         return;
     }
-    
     if (!codigo || codigo.length < 8) {
-        alert('Digite um código de barras válido (mínimo 8 caracteres).');
+        alert('Digite um código de barras válido.');
         return;
     }
-    
     input.value = codigo;
     document.getElementById('btnAddProduct')?.click();
 }
 
 // ================================================================
-// EXPORTAR FUNÇÕES
+// EXPORTAR
 // ================================================================
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         abrirScannerBarras,
         fecharScanner,
-        isCameraSupported,
+        isCameraSupported: () => !!(navigator.mediaDevices?.getUserMedia),
         testarCodigoBarrasManual
     };
 }
-
-// ================================================================
-// EXPORTA PARA O CONSOLE (DEBUG)
-// ================================================================
 
 window.testarCodigoBarrasManual = testarCodigoBarrasManual;
 window.abrirScannerBarras = abrirScannerBarras;
