@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Cart - Carrinho Inteligente</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ============================================================ -->
+    <!-- TELA DE LOGIN                                                -->
+    <!-- ============================================================ -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="logo">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Smart Cart</span>
+            </div>
+            <h2>Bem-vindo ao Carrinho Inteligente</h2>
+            <p class="subtitle">Escanear QR Code do app do mercado para iniciar</p>
+            
+            <div class="qr-reader-area">
+                <div class="qr-frame">
+                    <i class="fas fa-qrcode"></i>
+                    <span>Posicione o QR Code aqui</span>
+                </div>
+                <button id="btnOpenScanner" class="btn-primary">
+                    <i class="fas fa-camera"></i> Abrir Câmera
+                </button>
+                <button id="btnManualCode" class="btn-secondary">
+                    <i class="fas fa-keyboard"></i> Inserir código manualmente
+                </button>
+            </div>
+            
+            <div id="loginError" class="error-message" style="display:none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Código inválido. Tente novamente.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TELA PRINCIPAL                                               -->
+    <!-- ============================================================ -->
+    <div id="mainScreen" class="screen">
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <i class="fas fa-user-circle"></i>
+                <span id="userName">Cliente</span>
+            </div>
+            <div class="header-center">
+                <span id="cartId">Carrinho #001</span>
+            </div>
+            <div class="header-right">
+                <span id="itemCount">0 itens</span>
+            </div>
+        </header>
+
+        <!-- STATUS DE SEGURANÇA -->
+        <div id="securityStatus" class="security-bar safe">
+            <i class="fas fa-check-circle"></i>
+            Sistema seguro
+        </div>
+
+        <!-- PRODUTOS PENDENTES (CONFIRMAÇÃO) -->
+        <div id="pendingContainer">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;color:#5f6368;">
+                <i class="fas fa-hourglass-half"></i>
+                <span>Aguardando confirmação:</span>
+                <span id="pendingCount" style="font-weight:600;color:#1a73e8;">0</span>
+            </div>
+            <div id="pendingProducts">
+                <div style="text-align:center;color:#5f6368;padding:8px;font-size:13px;">
+                    Nenhum produto aguardando confirmação
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTA DE PRODUTOS -->
+        <div class="product-list-container">
+            <h3><i class="fas fa-list"></i> Produtos no Carrinho</h3>
+            <div id="productList" class="product-list">
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-basket"></i>
+                    <p>Carrinho vazio</p>
+                    <span style="font-size:12px;">Escaneie e confirme um produto</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCANNER -->
+        <div class="scanner-area">
+            <div class="scanner-input">
+                <input type="text" id="barcodeInput" placeholder="Código de barras ou escaneie" autofocus>
+                <button id="btnAddProduct" class="btn-scan">
+                    <i class="fas fa-plus"></i> Adicionar
+                </button>
+            </div>
+            <div class="scanner-actions">
+                <button id="btnScanBarcode" class="btn-scan-camera">
+                    <i class="fas fa-camera"></i> Escanear código
+                </button>
+            </div>
+        </div>
+
+        <!-- CHECKOUT -->
+        <div class="checkout-area">
+            <div class="summary">
+                <div class="summary-item">
+                    <span>Subtotal</span>
+                    <span id="subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total</span>
+                    <span id="total">R$ 0,00</span>
+                </div>
+            </div>
+            <div class="payment-actions">
+                <button id="btnPix" class="btn-payment pix">
+                    <i class="fas fa-qrcode"></i> PIX
+                </button>
+                <button id="btnNFC" class="btn-payment nfc">
+                    <i class="fas fa-wifi"></i> Aproximação
+                </button>
+                <button id="btnFinish" class="btn-payment finish">
+                    <i class="fas fa-check"></i> Finalizar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TELA DE PAGAMENTO                                            -->
+    <!-- ============================================================ -->
+    <div id="paymentScreen" class="screen">
+        <div class="payment-container">
+            <h2><i class="fas fa-credit-card"></i> Pagamento</h2>
+            
+            <div id="pixArea" style="display:none;">
+                <p>Escanear QR Code PIX:</p>
+                <div id="pixQRCode" class="qr-code-display">
+                    <img id="pixQRImage" src="" alt="QR Code PIX">
+                </div>
+                <p class="pix-value">Valor: <strong id="pixValue">R$ 0,00</strong></p>
+                <button id="btnCopyPix" class="btn-secondary">
+                    <i class="fas fa-copy"></i> Copiar chave PIX
+                </button>
+            </div>
+
+            <div id="nfcArea" style="display:none;">
+                <p>Aproxime o cartão no leitor NFC</p>
+                <div class="nfc-animation">
+                    <i class="fas fa-credit-card"></i>
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <p class="nfc-value">Valor: <strong id="nfcValue">R$ 0,00</strong></p>
+                <button id="btnNFCConfirm" class="btn-primary">
+                    <i class="fas fa-check"></i> Confirmar pagamento
+                </button>
+            </div>
+
+            <div id="paymentSuccess" style="display:none;" class="success-message">
+                <i class="fas fa-check-circle"></i>
+                <h3>Pagamento confirmado!</h3>
+                <p>Compra finalizada com sucesso.</p>
+                <button id="btnNewPurchase" class="btn-primary">
+                    <i class="fas fa-redo"></i> Nova compra
+                </button>
+            </div>
+
+            <button id="btnBackToCart" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS                                                      -->
+    <!-- ============================================================ -->
+    <script src="config.js"></script>
+    <script src="database.js"></script>
+    <script src="security.js"></script>
+    <script src="payment.js"></script>
+    <script src="scanner.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
